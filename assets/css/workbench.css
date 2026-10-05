@@ -1,0 +1,236 @@
+/* 投递工作台 W3 · 工作台外壳（app chrome）
+ * 语言：把门面页包成「本地工具」的应用外壳 —— 菜单条 / 工具栏 / 章节页签 / 左侧面板 / 底部状态栏
+ * 约束：零外链；不改 main.css 与 sections.css（本文件后加载，按同级选择器覆盖）
+ * 注意：不给 .sec 的任何祖先加 position（会改变 offsetTop，破坏验收脚本的滚动定位）
+ */
+
+:root{ --wb-menu:30px; --wb-bar:52px; --wb-tabs:38px; --wb-chrome:120px; }
+
+/* ---------- 画布网格（工作台底纹） ---------- */
+body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(15,23,42,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,.045) 1px, transparent 1px);
+  background-size:34px 34px, 34px 34px;
+  -webkit-mask-image:radial-gradient(122% 88% at 50% 0%, #000 26%, transparent 76%);
+          mask-image:radial-gradient(122% 88% at 50% 0%, #000 26%, transparent 76%)}
+body.no-grid::before{display:none}
+
+/* ---------- 菜单条 ---------- */
+.wb-menubar{position:sticky; top:0; z-index:40; height:var(--wb-menu);
+  display:flex; align-items:center; gap:4px; padding:0 clamp(10px,1.6vw,16px);
+  background:rgba(255,255,255,.94); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line2);
+  font-family:var(--font-mono); font-size:11.5px; color:var(--dim)}
+.wb-app{display:inline-flex; align-items:center; gap:7px; margin-right:8px;
+  color:#CFD8E3; font-weight:600; letter-spacing:.02em; white-space:nowrap}
+.wb-app i{width:9px; height:9px; border-radius:2px;
+  background:linear-gradient(135deg,var(--teal),var(--blue)); display:block}
+.wb-mi{padding:2px 8px; border-radius:5px; color:var(--faint); white-space:nowrap}
+.wb-mi.is-static{opacity:.72; cursor:default}
+.wb-menu-right{margin-left:auto; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; color:var(--faint)}
+.wb-lamp{width:6px; height:6px; border-radius:50%; background:var(--teal); flex:0 0 auto;
+  box-shadow:0 0 8px rgba(13,122,98,.85)}
+
+/* ---------- 工具栏（接管 .nav） ---------- */
+.nav{position:sticky; top:var(--wb-menu); height:var(--wb-bar); z-index:39;
+  padding:0 clamp(10px,1.6vw,16px); gap:10px}
+.brand-wrap{display:flex; align-items:center; gap:12px; min-width:0}
+.wb-crumb{font-family:var(--font-mono); font-size:11.5px; color:var(--faint);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:32ch}
+.tb-chip{display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(13,122,98,.32);
+  background:rgba(13,122,98,.06); color:var(--teal); border-radius:999px; padding:3px 9px;
+  font-family:var(--font-mono); font-size:11px; white-space:nowrap}
+.tb-toggle{background:rgba(15,23,42,.035); border:1px solid var(--line); color:var(--dim);
+  border-radius:7px; height:26px; padding:0 10px; cursor:pointer;
+  font-family:var(--font-mono); font-size:11.5px; white-space:nowrap;
+  transition:color .18s ease, background .18s ease, border-color .18s ease}
+.tb-toggle:hover{color:var(--txt); background:rgba(15,23,42,.07)}
+.tb-toggle[aria-pressed="true"]{color:#FFFFFF; border-color:transparent;
+  background:linear-gradient(120deg,var(--teal),var(--blue))}
+
+/* ---------- 章节页签 ---------- */
+.wb-tabs{position:sticky; top:calc(var(--wb-menu) + var(--wb-bar)); z-index:38;
+  height:var(--wb-tabs); display:flex; align-items:stretch; gap:2px;
+  padding:0 clamp(10px,1.6vw,16px); overflow-x:auto; overflow-y:hidden;
+  background:rgba(255,255,255,.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line2); scrollbar-width:none}
+.wb-tabs::-webkit-scrollbar{display:none}
+.wb-tab{background:none; border:0; border-bottom:2px solid transparent; padding:0 14px;
+  font-family:var(--font-mono); font-size:12px; color:var(--dim); cursor:pointer; white-space:nowrap;
+  transition:color .18s ease, background .18s ease, border-color .18s ease}
+.wb-tab:hover{color:var(--txt); background:rgba(15,23,42,.05)}
+.wb-tab.is-active{color:var(--txt); border-bottom-color:var(--teal)}
+
+/* ---------- 外壳栅格 ---------- */
+.wb-shell{position:relative; z-index:2; display:grid;
+  grid-template-columns:236px minmax(0,1fr); gap:clamp(12px,1.5vw,18px);
+  max-width:1580px; margin:0 auto;
+  padding:clamp(12px,2vh,20px) clamp(12px,2vw,22px) clamp(6px,1.2vh,12px)}
+.wb-main{min-width:0}
+main{padding-top:0}
+
+/* ---------- 左侧面板 ---------- */
+.wb-side{position:sticky; top:calc(var(--wb-chrome) + 12px); align-self:start;
+  max-height:calc(100svh - var(--wb-chrome) - 40px); overflow:auto;
+  display:flex; flex-direction:column; gap:14px;
+  border:1px solid var(--line); border-radius:12px; padding:13px 12px;
+  background:linear-gradient(180deg,rgba(15,23,42,.028),rgba(15,23,42,.010))}
+.wb-side[hidden]{display:none}
+.side-h{margin:0 0 9px; font-family:var(--font-mono); font-size:10.5px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--faint)}
+.side-list{list-style:none; margin:0; padding:0; display:grid; gap:4px}
+.side-item{width:100%; display:flex; align-items:center; gap:8px; text-align:left; cursor:pointer;
+  background:none; border:1px solid transparent; border-radius:7px; padding:7px 8px;
+  font:inherit; font-size:12.5px; color:#C6D0DC;
+  transition:background .18s ease, border-color .18s ease, color .18s ease}
+.side-item:hover{background:rgba(15,23,42,.055); color:var(--txt)}
+.side-item.is-on{border-color:rgba(13,122,98,.45); background:rgba(13,122,98,.10); color:var(--txt)}
+.side-dot{width:6px; height:6px; border-radius:50%; flex:0 0 auto}
+.side-dot.live{background:var(--teal)}
+.side-dot.part{background:#E7C77A}
+.side-dot.plan{background:#5F6E80}
+.side-item .st{margin-left:auto; font-family:var(--font-mono); font-size:10.5px; color:var(--faint)}
+.side-meta{list-style:none; margin:0; padding:0; display:grid; gap:6px}
+.side-meta li{display:flex; gap:8px; align-items:baseline; font-size:12.2px; color:var(--body)}
+.side-meta .k{flex:0 0 58px; font-family:var(--font-mono); font-size:11px; color:var(--faint)}
+.side-meta .v{min-width:0}
+.side-log{list-style:none; margin:0; padding:0; display:grid; gap:5px;
+  font-family:var(--font-mono); font-size:11px; line-height:1.5; color:var(--dim)}
+.side-log li{display:flex; gap:7px; min-width:0}
+.side-log .t{color:var(--faint); flex:0 0 auto}
+.side-log .m{min-width:0; overflow-wrap:anywhere}
+
+/* ---------- 区块 = 面板 ---------- */
+.sec{max-width:none; margin:0 0 clamp(12px,1.8vh,18px);
+  padding:clamp(18px,2.3vw,26px);
+  border:1px solid var(--line); border-radius:12px;
+  background:linear-gradient(180deg,rgba(15,23,42,.030),rgba(15,23,42,.011))}
+.sec + .sec{border-top:1px solid var(--line)}
+.pane-bar{display:flex; align-items:center; gap:9px; margin:0 0 15px; padding:0 0 10px;
+  border-bottom:1px solid var(--line2);
+  font-family:var(--font-mono); font-size:11px; color:var(--faint); white-space:nowrap}
+.pane-id{color:var(--teal)}
+.pane-name{color:#C6D0DC; overflow:hidden; text-overflow:ellipsis}
+.pane-tag{margin-left:auto; border:1px solid var(--line); border-radius:999px; padding:1px 8px; font-size:10.5px}
+.hero{min-height:calc(100svh - var(--wb-chrome) - 24px)}
+
+/* ---------- 底部状态栏 ---------- */
+.foot{position:relative; z-index:2; display:flex; align-items:center; flex-wrap:wrap;
+  gap:8px clamp(10px,2vw,20px); margin:0; padding:9px clamp(12px,2vw,22px);
+  border-top:1px solid var(--line2); text-align:left;
+  background:rgba(255,255,255,.94);
+  font-family:var(--font-mono); font-size:11.5px; color:var(--dim)}
+.foot .seg{display:inline-flex; align-items:center; gap:7px; white-space:nowrap}
+.foot .seg.grow{margin-left:auto; white-space:normal; min-width:0; flex:1 1 auto}
+.foot b{color:var(--txt); font-weight:600}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1080px){
+  .wb-shell{grid-template-columns:minmax(0,1fr)}
+  .wb-side{display:none}
+  .wb-side.is-open{display:flex; position:static; max-height:none}
+  .wb-crumb{display:none}
+}
+@media (max-width:620px){
+  :root{--wb-menu:28px; --wb-bar:46px; --wb-tabs:36px; --wb-chrome:110px}
+  .foot .seg{white-space:normal; min-width:0}
+  .foot .seg.grow{flex:1 1 100%; margin-left:0}
+  .wb-mi.is-static{display:none}
+  .tb-chip{display:none}
+  .wb-shell{padding:10px 10px 8px}
+  .sec{padding:16px 14px; border-radius:10px}
+  .pane-bar{font-size:10.5px}
+  .foot{font-size:11px; gap:6px 12px}
+  .foot .seg.grow{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){
+  .wb-tab,.tb-toggle,.side-item{transition:none}
+}
+
+/* 兜底：状态栏/工具栏任何长文本不得撑破窄屏（曾实测 .seg.grow 505px 宽 → body 517px） */
+.foot .seg,.wb-menubar,.pane-bar{min-width:0}
+
+/* ---------- v4 修订（2026-10-02）：显示修正 ---------- */
+/* 1) 首屏 pane 条原为流内网格项，落在第二列与文案重叠；改为绝对定位并预留高度 */
+.hero{padding-top:calc(clamp(24px,5vh,64px) + 46px)}
+.hero > .pane-bar{position:absolute; top:clamp(24px,5vh,64px);
+  left:clamp(16px,5vw,56px); right:clamp(16px,5vw,56px); margin:0}
+/* 2) 光流轨道左移，不再被 pane-bar 的底边压住 */
+.sec-rail{left:10px}
+/* 3) 侧栏保险：区块面板 z=2，侧栏提到其上 */
+.wb-side{z-index:3}
+/* 4) 窄屏菜单条：长状态换短标签，避免顶到右边缘 */
+.mr-short{display:none}
+@media (max-width:620px){
+  .sec-rail{left:8px}
+  .mr-long{display:none}
+  .mr-short{display:inline}
+}
+/* ---------- v5 修订（2026-10-02 看图后）显示修正 ---------- */
+/* A) 面包屑不再被 32ch 硬上限截断（交给 flex 自然收缩） */
+.wb-crumb{max-width:none; flex:0 1 auto; min-width:0}
+/* B) 工具栏控件等高（原“左侧面板”26px vs 按钮 38px） */
+.nav .tb-toggle{height:38px; padding:0 13px; font-size:13.5px}
+/* C) 工具栏文本不折行（原 390 实测被拆成 2–3 行） */
+.nav .btn,.nav .tb-toggle{white-space:nowrap}
+@media (max-width:620px){
+  /* D) 390 排不下三个控件：隐藏「左侧面板」（窄屏下它也是死按钮） */
+  .nav-links .tb-toggle{display:none}
+  /* E) 品牌不被 flex 压缩后文字压住按钮（实测重叠 8px） */
+  .brand{flex:0 0 auto}
+  .nav-links{flex:0 1 auto; min-width:0}
+}
+/* F) 390 实测 .nav-links 内容 247 > 容器 245（2px 被裁）：收窄间距 */
+@media (max-width:620px){
+  .nav-links{gap:4px}
+}
+/* ---------- v5c 修订（2026-10-02 看图后）：红线符号 ✓ → ✕ ---------- */
+/* 原用 border-left+bottom 旋转 -45° 画出的是「对勾」，在「红线/禁止项」上语义反了；
+   改用两条对角线画出 ✕（禁止）。零字体依赖。 */
+.redlines li::before{border:0; border-radius:0; transform:none;
+  width:10px; height:10px; left:1px; top:.46em;
+  background:
+    linear-gradient(45deg, transparent 42%, rgba(180,35,24,.85) 42%, rgba(180,35,24,.85) 58%, transparent 58%),
+    linear-gradient(-45deg, transparent 42%, rgba(180,35,24,.85) 42%, rgba(180,35,24,.85) 58%, transparent 58%)}
+/* ---------- v5d 修订（2026-10-02 看图后）：菜单条按钮去掉 UA 立体样式 ---------- */
+/* 原 <button class="wb-mi"> 没重置 border/background，浏览器默认画成亮边框立体按钮，
+   与旁边的“文件/视图/运行”纯文字样式不一致（图片实测）。 */
+.wb-menubar button.wb-mi{background:none; border:0; cursor:pointer; font:inherit;
+  font-family:var(--font-mono); font-size:11.5px; padding:2px 8px; border-radius:5px;
+  transition:background .18s ease, color .18s ease}
+.wb-menubar button.wb-mi:hover{background:rgba(15,23,42,.07); color:var(--txt)}
+.wb-menubar button.wb-mi[aria-pressed="true"]{color:var(--teal); background:rgba(13,122,98,.10)}
+/* ---------- v5e 修订（2026-10-02 看图后）：窄屏状态栏缩短 ---------- */
+.fl-short{display:none}
+@media (max-width:620px){
+  .fl-long{display:none}
+  .fl-short{display:inline}
+  /* 底栏在 390 实测 125px（占屏 15%），压到两行内 */
+  .foot{gap:5px 10px; padding:7px 10px 8px; line-height:1.45}
+  .foot .seg{gap:5px}
+}
+/* ---------- v5f 修订（2026-10-02 看图后）：侧栏开关不再假冒主 CTA ---------- */
+/* 原 aria-pressed="true" 用了与主按钮同款的青蓝渐变，视觉上抢了「看它怎么工作」的位置；
+   改为低强度青色浅底 + 青字，仍能表达「已开」。 */
+.tb-toggle[aria-pressed="true"]{color:var(--teal); border-color:rgba(13,122,98,.42);
+  background:rgba(13,122,98,.10)}
+.tb-toggle[aria-pressed="true"]:hover{background:rgba(13,122,98,.16); color:var(--teal)}
+/* ---------- v5g 修订（2026-10-02 看图后）：中文词内不断行 ---------- */
+/* 实测图片：M2 副标题末尾「规划中」被折行拆成「规划 / 中」。只包 3 字的短片段禁断行，不影响 390。 */
+.nw{white-space:nowrap}
+/* ---------- v6 修订（2026-10-03 看图后）：621–1080 状态栏不再把时钟挤到第二行 ---------- */
+/* 实测：1024 下 .foot .seg.grow 的 flex-basis 默认 auto（=max-content ≈600px）吃掉整行，
+   把时钟单独挤到第 2 行（footer 64px、第 2 行只剩一个 48px 的时钟）；621px 时更糟（101px / 3 行）。
+   修法：621–1080 与 ≤620 统一改用短标签 + 可收缩基线，免责文本在自己的格里折行或收缩，时钟留在第 1 行。 */
+@media (min-width:621px) and (max-width:900px){
+  /* 实测 768：5 个标签 + 短免责已占满第 1 行，时钟被挤到第 2 行独占一行（footer 64px，视觉像没做完）。
+     该带宽内隐藏「视口」读数（侧栏状态/≤620 各有同一读数兜底），把时钟收回第 1 行。
+     注意：必须写 .foot .seg.x-vp——只写 .x-vp 会被 .foot .seg 的 display:inline-flex 按特异性压掉（实测踩过）。 */
+  .foot .seg.x-vp{display:none}
+}
+@media (min-width:621px) and (max-width:1080px){
+  .fl-long{display:none}
+  .fl-short{display:inline}
+  .foot .seg.grow{flex:1 1 auto; min-width:0; margin-left:auto}
+}

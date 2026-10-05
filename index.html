@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>云帆 YUNFAN · 网申表单，只填不交</title>
+<meta name="description" content="只填不交的网申填报工作台：DuMate 智能体识别表单字段，高置信度才填，提交永远由你点。本机运行，简历不出机器。">
+<meta name="theme-color" content="#F5F7FA">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/sections.css">
+<link rel="stylesheet" href="assets/css/workbench.css">
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+
+<div class="wb-menubar" aria-label="应用菜单">
+  <span class="wb-app"><i aria-hidden="true"></i>云帆 YUNFAN</span>
+  <span class="wb-mi is-static">文件</span>
+  <span class="wb-mi is-static">视图</span>
+  <span class="wb-mi is-static">运行</span>
+  <button type="button" class="wb-mi" id="gridBtn" aria-pressed="true" title="开关背景网格">网格</button>
+  <button type="button" class="wb-mi" id="menuHowBtn" aria-haspopup="dialog">帮助</button>
+  <span class="wb-menu-right"><span class="wb-lamp" aria-hidden="true"></span><span class="mr-long">iCAN 2026 · DuMate 智能体作品</span><span class="mr-short">iCAN 2026</span></span>
+</div>
+
+<header class="nav">
+  <div class="brand-wrap">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">云帆 YUNFAN</span>
+      <span class="brand-tag">DuMate · 作品</span>
+    </a>
+    <p class="wb-crumb">~/云帆/<b id="crumbSec">总览</b></p>
+    <nav class="nav-links" aria-label="站点导航">
+      <button type="button" class="tb-toggle" id="panelBtn" aria-pressed="true" aria-controls="wbSide" title="显示 / 隐藏左侧面板">左侧面板</button>
+      <button type="button" class="btn btn-ghost" id="howBtn" aria-haspopup="dialog">它怎么工作</button>
+      <button type="button" class="btn btn-ghost" disabled title="原分享链接已由发布者删除，正在重新发布">作品重发中<span class="badge-soon">重发中</span></button>
+    </nav>
+  </div>
+</header>
+
+<nav class="wb-tabs" aria-label="章节导航">
+  <button type="button" class="wb-tab is-active" data-nav="top" aria-current="true">总览</button>
+  <button type="button" class="wb-tab" data-nav="m1">M1 · 三条承诺</button>
+  <button type="button" class="wb-tab" data-nav="m2">M2 · 能力看板</button>
+  <button type="button" class="wb-tab" data-nav="m3">M3 · 能力与红线</button>
+  <button type="button" class="wb-tab" data-nav="m4">M4 · 收尾</button>
+</nav>
+
+<div class="wb-shell">
+<aside class="wb-side" id="wbSide" aria-label="工作台侧栏">
+  <section>
+    <h2 class="side-h">目录</h2>
+    <ul class="side-list">
+      <li><button type="button" class="side-item is-on" data-nav="top"><span class="side-dot live" aria-hidden="true"></span>总览<span class="st">00</span></button></li>
+      <li><button type="button" class="side-item" data-nav="m1"><span class="side-dot live" aria-hidden="true"></span>三条承诺<span class="st">01</span></button></li>
+      <li><button type="button" class="side-item" data-nav="m2"><span class="side-dot live" aria-hidden="true"></span>能力看板<span class="st">02</span></button></li>
+      <li><button type="button" class="side-item" data-nav="m3"><span class="side-dot live" aria-hidden="true"></span>能力与红线<span class="st">03</span></button></li>
+      <li><button type="button" class="side-item" data-nav="m4"><span class="side-dot live" aria-hidden="true"></span>收尾<span class="st">04</span></button></li>
+    </ul>
+  </section>
+  <section>
+    <h2 class="side-h">状态</h2>
+    <ul class="side-meta">
+      <li><span class="k">版本</span><span class="v">云帆 v1.0</span></li>
+      <li><span class="k">作品</span><span class="v">iCAN 2026 参赛作品</span></li>
+      <li><span class="k">状态</span><span class="v">重发中 · 原链接已删除</span></li>
+      <li><span class="k">视口</span><span class="v" id="sideViewport">--</span></li>
+    </ul>
+  </section>
+  <section>
+    <h2 class="side-h">本机运行日志</h2>
+    <ul class="side-log">
+      <li><span class="t">00:00</span><span class="m">在 DuMate 上运行，可「运行同款」复现。</span></li>
+      <li><span class="t">00:01</span><span class="m">简历与规则库只存本机，不上传。</span></li>
+      <li><span class="t">00:02</span><span class="m">作品重发中（原链接已删除 2026-10-06）</span></li>
+    </ul>
+  </section>
+</aside>
+<div class="wb-main">
+<main id="top">
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="pane-bar"><span class="pane-id">PANEL 00</span><span class="pane-name">总览 · 首屏</span><span class="pane-tag">重发中</span></div>
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>求职 + 保研 · DuMate 智能体</p>
+      <h1 id="heroTitle" class="hero-title">
+        <span class="line"><span class="line-in">网申表单，</span></span>
+        <span class="line"><span class="line-in accent">只填不交。</span></span>
+      </h1>
+      <p class="hero-sub">在 DuMate 上打开目标报名页。它辨认表单字段，把本机简历填进去；<strong>提交那一下，永远是你自己点。</strong></p>
+      <div class="cta-row">
+        <button type="button" class="btn btn-primary" id="heroHowBtn" aria-haspopup="dialog">看它怎么工作</button>
+        <button type="button" class="btn btn-ghost" disabled title="原分享链接已由发布者删除，正在重新发布">作品重发中<span class="badge-soon">重发中</span></button>
+      </div>
+      <ul class="promises">
+        <li>只填不交<small>源码里没有提交调用</small></li>
+        <li>本机运行<small>简历不出这台机器</small></li>
+        <li>可导出<small>规则库随时带走</small></li>
+      </ul>
+      <p class="hint">首屏为示例演示：卡内字段为<strong>虚构示例数据</strong>，不是真实简历。</p>
+    </div>
+
+    <div class="hero-stage">
+      <figure class="apply-card" id="applyCard" role="img"
+        aria-label="示例：一张网申表单被依次点亮，字段逐项落位，页面提示已填 9 项、提交 0 次">
+        <figcaption class="card-head">
+          <span class="card-id">示例投递 · 某科技公司 · 数据岗</span>
+          <span class="chip">示例数据（虚构）</span>
+        </figcaption>
+        <ul class="fields">
+          <li class="field"><span class="f-label">姓名</span><span class="f-box"><span class="f-val">张&nbsp;*</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">手机号</span><span class="f-box"><span class="f-val">138&nbsp;****&nbsp;0000</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">邮箱</span><span class="f-box"><span class="f-val">demo@example.com</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">学校</span><span class="f-box"><span class="f-val">示例大学</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">专业</span><span class="f-box"><span class="f-val">信息管理与信息系统</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">学历</span><span class="f-box"><span class="f-val">本科</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">毕业时间</span><span class="f-box"><span class="f-val">2027-06</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">身份证号</span><span class="f-box"><span class="f-val">110101&nbsp;********&nbsp;0000</span><span class="f-tick" aria-hidden="true"></span></span></li>
+          <li class="field"><span class="f-label">政治面貌</span><span class="f-box"><span class="f-val">共青团员</span><span class="f-tick" aria-hidden="true"></span></span></li>
+        </ul>
+        <p class="card-foot">
+          <span class="stat">已填 <b id="statFilled">0</b> 项</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span class="stat danger">提交 <b id="statSubmit">0</b> 次</span>
+        </p>
+        <span class="flow" aria-hidden="true">
+          <svg viewBox="0 0 24 520" preserveAspectRatio="none" focusable="false">
+            <path class="flow-track" d="M12 6 V 470 Q 12 500 30 500"/>
+            <path class="flow-beam" d="M12 6 V 470 Q 12 500 30 500"/>
+          </svg>
+        </span>
+      </figure>
+      <p class="stage-note">动效：字段沿光流自上而下依次点亮（2.3 秒内完成一次）。</p>
+    </div>
+  </section>
+</main>
+
+
+  <section class="sec" id="m1" aria-labelledby="m1Title">
+    <div class="pane-bar"><span class="pane-id">PANEL 01</span><span class="pane-name">三条承诺</span><span class="pane-tag">M1</span></div>
+    <span class="sec-rail" aria-hidden="true"><i id="rail1"></i></span>
+    <header class="sec-head">
+      <p class="sec-eyebrow"><span class="sec-dot" id="dot1" aria-hidden="true"></span>M1 · 三条承诺</p>
+      <h2 class="sec-title" id="m1Title">它不承诺替你拿 offer，<br>只承诺三件能验证的事。</h2>
+      <p class="sec-sub">工具类产品最容易在这里说谎——「智能」「高效」「一键搞定」。我们反过来，把三条承诺写成<strong>能当场核对</strong>的事实。</p>
+    </header>
+
+    <div class="pcards">
+      <article class="pcard rv" id="pc1">
+        <p class="p-ratio"><span class="p-idx">01</span><span>/ 03 · 权限</span></p>
+        <h3 class="p-title">只填不交</h3>
+        <p class="p-desc">流程里没有提交这一步。填完停手，最后那一下永远由你自己点。</p>
+        <p class="p-ev">可核对：作品页「调用资源」栏里没有任何提交类动作；六步旅程第 6 步写的是<b>学生自己点击提交</b></p>
+      </article>
+      <article class="pcard rv" id="pc2">
+        <p class="p-ratio"><span class="p-idx">02</span><span>/ 03 · 数据</span></p>
+        <h3 class="p-title">本机运行</h3>
+        <p class="p-desc">简历与规则库只存在你自己的机器上，不上传、不建账号、不需要登录。</p>
+        <p class="p-ev">可核对：发布到广场的只有脱敏示例；真实档案不出本机</p>
+      </article>
+      <article class="pcard rv" id="pc3">
+        <p class="p-ratio"><span class="p-idx">03</span><span>/ 03 · 边界</span></p>
+        <h3 class="p-title">低置信度不填</h3>
+        <p class="p-desc">拿不准的字段只标黄交给你判断；密码框、文件上传框一律不碰。</p>
+        <p class="p-ev">可核对：判定阈值写在 <b>policy.json</b>（可调、可回归）；Skill 带 happy_path / negative / clarify / safety 四类用例</p>
+      </article>
+    </div>
+    <p class="sec-note">以上三条的实测证据在<b>本机单元测试</b>与<b>交叉验证记录</b>里；未跑第三方安全审计，故不写「已通过安全审计」。</p>
+<div class="kpi-row" style="display:flex;gap:12px;margin:14px 0;flex-wrap:wrap">
+  <div style="flex:1;min-width:120px;background:#F5F7FA;border:1px solid #E2E8F0;border-radius:10px;padding:12px;text-align:center">
+    <b style="display:block;font-size:26px;color:#0D7A62">104</b><span style="font-size:12px;color:#52627A">可见控件</span></div>
+  <div style="flex:1;min-width:120px;background:#F5F7FA;border:1px solid #E2E8F0;border-radius:10px;padding:12px;text-align:center">
+    <b style="display:block;font-size:26px;color:#0D7A62">84.6%</b><span style="font-size:12px;color:#52627A">字段命中率</span></div>
+  <div style="flex:1;min-width:120px;background:#F5F7FA;border:1px solid #E2E8F0;border-radius:10px;padding:12px;text-align:center">
+    <b style="display:block;font-size:26px;color:#0D7A62">98.1%</b><span style="font-size:12px;color:#52627A">交叉验证一致率</span></div>
+  <div style="flex:1;min-width:120px;background:#F5F7FA;border:1px solid #E2E8F0;border-radius:10px;padding:12px;text-align:center">
+    <b style="display:block;font-size:26px;color:#0D7A62">0</b><span style="font-size:12px;color:#52627A">自动提交次数</span></div>
+</div>
+<p class="sec-note">数字随 2026-10-06 交叉验证更新：<b>84.6%</b> 为修复三个缺陷后的命中率（原 73.8%）；<b>98.1%</b> 是与独立标注的一致率，<b>不等同于准确率</b>。</p>
+  </section>
+
+  <section class="sec" id="m2" aria-labelledby="m2Title">
+    <div class="pane-bar"><span class="pane-id">PANEL 02</span><span class="pane-name">能力看板</span><span class="pane-tag">M2</span></div>
+    <span class="sec-rail" aria-hidden="true"><i id="rail2"></i></span>
+    <header class="sec-head">
+      <p class="sec-eyebrow"><span class="sec-dot" id="dot2" aria-hidden="true"></span>M2 · 能力看板</p>
+      <h2 class="sec-title" id="m2Title">五块能力，点一块看它到底做到哪一步。</h2>
+      <p class="sec-sub">不写「即将上线」这种免检词。每块都标了状态：<strong>已跑通 / <span class="nw">规划中</span></strong>，并给出你此刻能自己核对的判据。</p>
+    </header>
+
+    <div class="bento" id="bento">
+      <button type="button" class="cell w2" data-key="rules" aria-pressed="false" aria-controls="boardNote">
+        <span class="c-idx">01</span><span class="chip-state live">已跑通</span>
+        <h3>字段映射 · 认出每个栏</h3>
+        <p class="c-desc">标签、占位符、邻近文本逐级匹配；同义词归一，分栏日期自动合并成一个字段。</p>
+        <svg class="c-vis" viewBox="0 0 78 34" aria-hidden="true" focusable="false">
+          <rect x="0" y="26" width="6" height="8" fill="rgba(13,122,98,.85)"/><rect x="12" y="18" width="6" height="16" fill="rgba(13,122,98,.7)"/>
+          <rect x="24" y="12" width="6" height="22" fill="rgba(13,122,98,.55)"/><rect x="36" y="7" width="6" height="27" fill="rgba(29,78,216,.5)"/>
+          <rect x="48" y="3" width="6" height="31" fill="rgba(29,78,216,.42)"/><rect x="60" y="0" width="6" height="34" fill="rgba(29,78,216,.34)"/>
+        </svg>
+      </button>
+
+      <button type="button" class="cell" data-key="iframe" aria-pressed="false" aria-controls="boardNote">
+        <span class="c-idx">02</span><span class="chip-state live">已跑通</span>
+        <h3>材料清单 · 每条带出处</h3>
+        <p class="c-desc">按目标院校或岗位的要求列材料，区分必交与加分，并标出缺口。</p>
+      </button>
+
+      <button type="button" class="cell" data-key="shadow" aria-pressed="false" aria-controls="boardNote">
+        <span class="c-idx">03</span><span class="chip-state live">已跑通</span>
+        <h3>截止倒计时 · 按紧迫度排序</h3>
+        <p class="c-desc">把多项申请的截止日排成倒计时，快到的先提醒；推算出来的日期会显式标注。</p>
+      </button>
+
+      <button type="button" class="cell w2" data-key="resume" aria-pressed="false" aria-controls="boardNote">
+        <span class="c-idx">04</span><span class="chip-state live">已跑通</span>
+        <h3>经历结构化 · 只整理不美化</h3>
+        <p class="c-desc">自由文本的经历整理成结构化档案，只在本地；原文没写的一律留空。</p>
+      </button>
+    </div>
+    <div class="bento" style="margin-top:clamp(11px,1.5vw,18px)">
+      <button type="button" class="cell w3" data-key="studio" aria-pressed="false" aria-controls="boardNote">
+        <span class="c-idx">05</span><span class="chip-state plan">规划中</span>
+        <h3>Workflow 编排 · 六步画成画布</h3>
+        <p class="c-desc">把六步旅程在 DuMate 可视化画布上连起来。规划中，未实现——所以本页不给它标「已上线」。</p>
+      </button>
+    </div>
+    <p class="board-note" id="boardNote" role="status" aria-live="polite"><b>点上面任意一块</b>，这里显示它的实测状态与复现判据。当前状态：未选择。</p>
+    <p class="board-hint">状态口径：已跑通 = 在作品里能被公开验证；规划中 = 未实现，只在路线图上，本页不给它任何「已上线」表述。</p>
+  </section>
+
+  <section class="sec" id="m3" aria-labelledby="m3Title">
+    <div class="pane-bar"><span class="pane-id">PANEL 03</span><span class="pane-name">能力与红线</span><span class="pane-tag">M3</span></div>
+    <span class="sec-rail" aria-hidden="true"><i id="rail3"></i></span>
+    <header class="sec-head">
+      <p class="sec-eyebrow"><span class="sec-dot" id="dot3" aria-hidden="true"></span>M3 · 能力与红线</p>
+      <h2 class="sec-title" id="m3Title">能做什么，不做什么。</h2>
+      <p class="sec-sub">三张卡对应三层能力：<strong>认得出</strong>（字段映射）、<strong>备得齐</strong>（材料与截止）、<strong>不越界</strong>（三条红线）。数字是这一层的关键量，不是价格。</p>
+    </header>
+
+    <div class="tiers">
+      <article class="tier rv">
+        <h3 class="t-name">认得出</h3>
+        <p class="t-tier-tag">form-field-mapper</p>
+        <p class="t-price" data-count="4" data-prefix="">4<small>个自研 Skill，已在作品页公开调用</small></p>
+        <ul class="t-what">
+          <li>标签 / 占位符 / 邻近文本逐级匹配</li>
+          <li>同义词归一：出生日期、手机、学历…</li>
+          <li>分栏日期（年 / 月 / 日）自动合并</li>
+        </ul>
+      </article>
+      <article class="tier is-featured rv">
+        <h3 class="t-name">备得齐</h3>
+        <p class="t-tier-tag">material-checklist · deadline-tracker</p>
+        <p class="t-price" data-count="6" data-prefix="">6<small>步旅程，最后一步永远交还给你</small></p>
+        <ul class="t-what">
+          <li>材料清单：每条带出处，缺口自动标出</li>
+          <li>截止倒计时：按紧迫度排序</li>
+          <li>经历结构化：只整理，不美化</li>
+        </ul>
+      </article>
+      <article class="tier rv">
+        <h3 class="t-name">不越界</h3>
+        <p class="t-tier-tag">红线靠架构，不靠提示词</p>
+        <p class="t-price" data-count="0" data-prefix="">0<small>次自动提交 —— 提交永远由你点</small></p>
+        <ul class="t-what">
+          <li>档案里没有的值一律留空</li>
+          <li>拿不准的标黄交给你确认</li>
+          <li>简历与个人信息仅存本机</li>
+        </ul>
+      </article>
+    </div>
+
+    <ul class="redlines">
+      <li>不代投、不代报名、不代填官方系统</li>
+      <li>不接收、不存储简历与证件原件</li>
+      <li>不承诺上岸 / 保过 / offer</li>
+      <li>不做官方认证类表述</li>
+      <li>不代注册账号、不代收验证码</li>
+      <li>不转售第三方 prompt 与技能正文</li>
+    </ul>
+    <p class="price-disclaimer">本作品只做信息整理与准备辅助，不碰学信网与院校推免系统；数字为各层关键量，本页不涉及任何收费。</p>
+  </section>
+
+  <section class="sec" id="m4" aria-labelledby="m4Title">
+    <div class="pane-bar"><span class="pane-id">PANEL 04</span><span class="pane-name">收尾</span><span class="pane-tag">M4</span></div>
+    <span class="sec-rail" aria-hidden="true"><i id="rail4"></i></span>
+    <div class="cta-final">
+      <svg class="beam-converge" viewBox="0 0 600 132" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="bcGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0D7A62"/><stop offset="100%" stop-color="#1D4ED8"/>
+        </linearGradient></defs>
+        <path class="bc-track" d="M300 4 V 96"/>
+        <circle class="bc-ring" cx="300" cy="100" r="18"/>
+        <path class="bc-line" id="bcLine" d="M300 4 V 90"/>
+        <circle class="bc-node" id="bcNode" cx="300" cy="100" r="5"/>
+      </svg>
+      <h2 id="m4Title">把「只填不交」做进每一步，<br>最后一下留给你。</h2>
+      <p>作品已在 DuMate 上发布，点一下就能打开同款。四个自研 Skill 全部公开可查，<strong>提交那一下永远由你点</strong>——这是我们对自己最硬的一条红线。</p>
+      <div class="cta-row">
+        <button type="button" class="btn btn-primary" id="howBtn2" aria-haspopup="dialog">看它怎么工作</button>
+        <button type="button" class="btn btn-ghost" disabled title="原分享链接已由发布者删除，正在重新发布">作品重发中<span class="badge-soon">重发中</span></button>
+      </div>
+      <p class="foot-links"><button type="button" id="ppBtn" aria-haspopup="dialog">隐私与边界</button>· 不代投、不代报名、不承诺上岸</p>
+    </div>
+  </section>
+</div>
+</div>
+
+<footer class="foot">
+  <span class="seg"><span class="wb-lamp" aria-hidden="true"></span><b>READY</b></span>
+  <span class="seg x-vp">视口 <b id="stW">--</b></span>
+  <span class="seg">当前 <b id="stSec">总览</b></span>
+  <span class="seg">表单 <b id="stFields">0/0</b></span>
+  <span class="seg">面板 <b id="stCells">未选择</b></span>
+  <span class="seg grow"><span class="fl-long">云帆 YUNFAN · iCAN 2026 参赛作品 · 在 DuMate 上运行；不代投、不代报名、不承诺上岸</span><span class="fl-short">iCAN 2026 作品 · 不代投、不代报名、不承诺上岸</span></span>
+  <span class="seg"><b id="stClock">--:--:--</b></span>
+</footer>
+
+
+<dialog id="howDlg" class="dlg" aria-labelledby="howTitle">
+  <h2 id="howTitle">它怎么工作</h2>
+  <ol class="how">
+    <li><b>在 DuMate 上打开</b><span>点作品链接即可用，不需要装任何东西。</span></li>
+    <li><b>读本机简历</b><span>简历只存在你自己机器上，不上传云端。</span></li>
+    <li><b>辨认字段</b><span>按标签、占位符、邻近文本、下拉选项逐级匹配，给每个字段打置信度分。</span></li>
+    <li><b>高置信度才填</b><span>低置信度只标黄留给你自己填；密码框、文件框一律不碰。</span></li>
+    <li><b>你自己提交</b><span>流程里没有提交这一步——填完停手，最后一下由你点。</span></li>
+  </ol>
+  <p class="dlg-note">作品地址：<b>（重发中）</b>　（可在「搭子时刻广场」找到同款）</p>
+  <form method="dialog" class="dlg-actions"><button class="btn btn-primary" value="ok">知道了</button></form>
+</dialog>
+
+
+<dialog id="ppDlg" class="dlg" aria-labelledby="ppTitle">
+  <h2 id="ppTitle">隐私与边界</h2>
+  <ol class="how">
+    <li><b>收集什么</b><span>不收集。简历与规则库只存在你本机，不上传、不写入任何云端知识库。</span></li>
+    <li><b>上传什么</b><span>不上传任何内容。发布到广场的只有脱敏后的示例，真实档案不出这台机器。</span></li>
+    <li><b>提交什么</b><span>不提交。流程里没有提交动作，最后一下永远由你自己点。</span></li>
+    <li><b>不碰什么</b><span>密码框、验证码、文件上传框一律不读不写；登录态由平台复用，我们不接触你的密码。</span></li>
+    <li><b>怎么删</b><span>本机档案由你自己保管；想清空就删掉本地那份 JSON。</span></li>
+  </ol>
+  <p class="dlg-note">以上为本作品实际遵守的边界，不是草稿。</p>
+  <form method="dialog" class="dlg-actions"><button class="btn btn-primary" value="ok">知道了</button></form>
+</dialog>
+
+<script src="assets/js/gsap.min.js"></script>
+<script src="assets/js/ScrollTrigger.min.js"></script>
+<script src="assets/js/sections.js"></script>
+<script src="assets/js/particles.js"></script>
+<script src="assets/js/hero.js"></script>
+<script src="assets/js/workbench.js"></script>
+</body>
+</html>
